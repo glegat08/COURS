@@ -1,0 +1,36 @@
+#include <iostream>
+
+struct Contact 
+{
+	std::string first_name;
+	std::string last_name;
+	int age;
+};
+
+struct Friendlist
+{
+	int contact;
+};
+
+void addContact(Friendlist&, Contact&)
+{
+
+}
+
+void removeContact(Friendlist&, Contact&)
+{
+
+}
+
+void display(Friendlist&)
+{
+
+}
+
+
+int main()
+{
+
+
+	return 0;
+}
