@@ -1,0 +1,41 @@
+#include <iostream>
+
+int main()
+{
+	int n = 10; // taille du tableau
+	int** m = nullptr; // initialisation du double pointeur m
+	m = new int* [n]; // m devient un nouveau pointeur de type int nom 'n'
+
+	for (int i = 0; i < n; ++i) // l'index 'i' calcul la taille du tableau n
+	{
+		m[i] = new int[n];
+	}
+
+	for (int i = 0; i < n; ++i) // prend les données de l'index i
+	{
+		for (int j = 0; j < n; ++j) // prend les données de l'index j
+		{
+			m[i][j] = i + j; // affiche le résultat de m = i + j
+		}
+	}
+
+	for (int i = 0; i < n; ++i) // affiche le tableau
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			std::cout << m[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+
+	for (int i = 0; i < n; ++i) // prend le tableau, supprime les données allouées et rend NULL m
+	{
+		delete[] m[i];
+		m[i] = nullptr;
+	}
+
+	delete[] m; // supprime la donnée alloué pour m
+	m = nullptr; // rend m NULL
+
+	return 0;
+}
