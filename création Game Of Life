@@ -1,0 +1,191 @@
+#include <iostream>
+
+enum State
+{
+    DEAD
+    , ALIVE
+};
+
+struct Grid
+{
+    State** values;
+    int width;
+    int height;
+
+    Grid() : values(nullptr), width(-1), height(-1)
+    {
+    }
+
+    ~Grid()
+    {
+        destroy();
+    }
+
+    void destroy()
+    {
+        for (int row = 0; row < height; ++row)
+            delete[] values[row];
+
+        delete[] values;
+        values = nullptr;
+    }
+
+    void create(int width_, int height_)
+    {
+        width = width_;
+        height = height_;
+
+        //  Faudra deleter a un moment donne.
+        values = new State * [height];
+        for (int row = 0; row < height; ++row)
+            values[row] = new State[width];
+
+        for (int row = 0; row < height; ++row)
+            for (int col = 0; col < width; ++col)
+                values[row][col] = DEAD;
+    }
+
+    void show()
+    {
+        for (int row = 0; row < height; ++row)
+        {
+            for (int col = 0; col < width; ++col)
+            {
+                if (values[row][col] == DEAD)
+                    std::cout << "." << " ";
+                else if (values[row][col] == ALIVE)
+                    std::cout << "#" << " ";
+                else
+                    std::cout << "Z" << " ";
+            }
+            std::cout << std::endl;
+        }
+
+        std::cout << "\n\n";
+    }
+
+    int getNumberOfAdjacentLivingCell(int cellRow, int cellCol)
+    {
+        bool isNotOnTop = (cellRow != 0);
+        bool isNotOnBottom = (cellRow != height - 1);
+        bool isNotOnLeft = (cellCol != 0);
+        bool isNotOnRight = (cellCol != height - 1);
+
+        int nbNeighboors = 0;
+
+        //  3 upper cells
+        if (isNotOnTop && isNotOnLeft && values[cellRow - 1][cellCol - 1] == ALIVE)
+            nbNeighboors++;
+        if (isNotOnTop && values[cellRow - 1][cellCol] == ALIVE)
+            nbNeighboors++;
+        if (isNotOnTop && isNotOnRight && values[cellRow - 1][cellCol + 1] == ALIVE)
+            nbNeighboors++;
+
+        // 3 bottoms cells
+        if (isNotOnBottom && isNotOnLeft && values[cellRow + 1][cellCol - 1] == ALIVE)
+            nbNeighboors++;
+        if (isNotOnBottom && values[cellRow + 1][cellCol] == ALIVE)
+            nbNeighboors++;
+        if (isNotOnBottom && isNotOnRight && values[cellRow + 1][cellCol + 1] == ALIVE)
+            nbNeighboors++;
+
+        // 2 side cells.
+        if (isNotOnLeft && values[cellRow][cellCol - 1] == ALIVE)
+            nbNeighboors++;
+        if (isNotOnRight && values[cellRow][cellCol + 1] == ALIVE)
+            nbNeighboors++;
+
+        return nbNeighboors;
+    }
+
+    int getNumberOfAdjacentLivingCell2(int cellRow, int cellCol)
+    {
+        int nbNeighboors;
+
+        for (int row = std::max(cellRow - 1, 0); row <= std::min(cellRow + 1, height - 1); ++row)
+            for (int col = std::max(cellCol - 1, 0); col <= std::min(cellCol + 1, width - 1); ++col)
+                if (values[row][col] == ALIVE)
+                    nbNeighboors++;
+
+        if (values[cellRow][cellCol] == ALIVE)
+            nbNeighboors--;
+
+        return nbNeighboors;
+    }
+
+    void iterate()
+    {
+        State** newValues = new State * [height];
+        for (int row = 0; row < height; ++row)
+            newValues[row] = new State[width];
+
+        for (int row = 0; row < height; ++row)
+        {
+            for (int col = 0; col < width; ++col)
+            {
+                int nbOfNeighboors = getNumberOfAdjacentLivingCell(row, col);
+                if (values[row][col] == DEAD)
+                {
+                    if (nbOfNeighboors == 3)
+                        newValues[row][col] = ALIVE;
+                    else
+                        newValues[row][col] = DEAD;
+                }
+                else if (values[row][col] == ALIVE)
+                {
+                    if ((nbOfNeighboors >= 2) && (nbOfNeighboors <= 3))
+                        newValues[row][col] = ALIVE;
+                    else
+                        newValues[row][col] = DEAD;
+                }
+                else
+                {
+                    std::cerr << "C'est la memerde!!!" << std::endl;
+                }
+            }
+        }
+
+        for (int row = 0; row < height; ++row)
+            delete[] values[row];
+
+        delete[] values;
+        values = nullptr;
+
+        values = newValues;
+    }
+};
+
+int main()
+{
+    Grid grid;
+
+    grid.create(40, 20);
+
+    grid.values[10][10] = ALIVE;
+    grid.values[10][11] = ALIVE;
+    grid.values[10][12] = ALIVE;
+
+    grid.values[10][20] = ALIVE;
+    grid.values[11][21] = ALIVE;
+    grid.values[10][21] = ALIVE;
+    grid.values[11][20] = ALIVE;
+
+    grid.values[10][30] = ALIVE;
+    grid.values[10][31] = ALIVE;
+    grid.values[10][32] = ALIVE;
+    grid.values[9][32] = ALIVE;
+    grid.values[8][31] = ALIVE;
+
+    grid.show();
+
+    while (true)
+    {
+        grid.iterate();
+        grid.show();
+        std::string toto;
+        std::cin >> toto;
+
+        if (toto == "e")
+            break;
+    }
+}
