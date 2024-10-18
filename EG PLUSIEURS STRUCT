@@ -1,0 +1,33 @@
+#include <iostream>
+
+struct Toto
+{
+    Toto()
+    {
+        std::cout << "Toto ctor" << std::endl;
+    }
+
+    ~Toto()
+    {
+        std::cout << "Toto dtor" << std::endl;
+    }
+};
+
+struct Tototititatapouetpouet
+{
+    Tototititatapouetpouet()
+    {
+        std::cout << "Tototititatapouetpouet ctor" << std::endl;
+    }
+
+    ~Tototititatapouetpouet()
+    {
+        std::cout << "Tototititatapouetpouet dtor" << std::endl;
+    }
+};
+
+int main()
+{
+    Toto toto;
+    Tototititatapouetpouet titi;
+}
