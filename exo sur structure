@@ -13,55 +13,40 @@ struct Friendlist
 	int contact[]; // ici on veut que contact soit un tableau (comme un carnet)
 };
 
-void addContact(Contact &first_name, Contact &last_name, Contact &age/*, Friendlist *contact[]*/)
+void addContact(Friendlist& friendlist)
 {
-	Contact fname;
-	std::cout << "First name : " << std::endl;
-	std::cin >> fname.first_name;
+	Contact newContact;
 
-	Contact lname;
-	std::cout << "Last name : " << std::endl;
-	std::cin >> lname.last_name;
+	std::cout << "First name : ";
+	std::getline(std::cin, newContact.first_name);
 
-	Contact rAge;
-	std::cout << "Age : " << std::endl;
-	std::cin >> rAge.age;
+	std::cout << "Last name : ";
+	std::getline(std::cin, newContact.last_name); // lis les espaces
 
-	std::cout << fname.first_name << " " << lname.last_name << " " << rAge.age << std::endl;
+	std::cout << "Age : ";
+	std::cin >> newContact.age;
+	std::cout << std::endl;
 
-	/*contact[4] = {fname, lname, rAge};*/ // on veut créer une liste avec ces données mais jsp comment faire
+	std::cout << newContact.first_name << " " << newContact.last_name << " " << newContact.age << std::endl;
 }
 
-void removeContact(Friendlist&, Contact&)
-{
+//void removeContact(Friendlist&, Contact&)
+//{
+//
+//}
 
-}
-
-void display(Contact &first_name, Contact &last_name, Contact &age)
-{
-	int name = first_name.length(); // je veux que name contienne le first_name
-	int** lines = nullptr;
-	lines = new int* [name];
-
-	for (int i = 0; i < name; ++i) // l'index analyse la taille de name
-	{
-		lines[i] = new int[name];
-	}
-
-
-	//for (int i = 0; i < first_name.length(); ++i) // comment faire pour afficher la taille de first_name ?
-	//	{
-	//	std::cout << " " << std::endl;
-	//	for (int j = 0; j < columns ; ++j)
-	//	}
-}
+//void display(Contact& contact)
+//{
+//	int nameLength = contact.first_name.length();
+//	std::cout << "Length : " << nameLength << std::endl;
+//}
 
 
 int main()
 {
-	Contact first_name; Contact last_name; Contact age;
+	Friendlist friendlist;
 
-	addContact(first_name, last_name, age);
+	addContact(friendlist);
 
 	return 0;
 }
