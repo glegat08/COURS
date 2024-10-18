@@ -1,0 +1,120 @@
+#include <iostream>
+#include <string>
+
+struct Contact
+{
+    std::string lastName;
+    std::string firstName;
+    int age;
+};
+
+int invalid_index()
+{
+    return -1;
+}
+
+struct FriendList
+{
+    Contact* contacts;
+    int size;
+
+    // constructor (ctor)
+    FriendList()
+    {
+        contacts = nullptr;
+        size = 0;
+    }
+
+    // destructor (dtor)
+    ~FriendList()
+    {
+        if (contacts)
+            delete[] contacts;
+    }
+
+    void addContact(std::string firstName, std::string lastName, int age)
+    {
+        //  First contact being added.
+        if (size == 0)
+        {
+            size = 1;
+            contacts = new Contact[1];
+
+            contacts[0].firstName = firstName;
+            contacts[0].lastName = lastName;
+            contacts[0].age = age;
+        }
+        else
+        {
+            size++;
+
+            Contact* newContactList = new Contact[size];
+
+            for (int i = 0; i < size - 1; ++i)
+                newContactList[i] = contacts[i];
+
+            delete[] contacts;
+            contacts = newContactList;
+
+            contacts[size - 1].firstName = firstName;
+            contacts[size - 1].lastName = lastName;
+            contacts[size - 1].age = age;
+        }
+    }
+
+    void removeContact(std::string firstName, std::string lastName, int age)
+    {
+        //  First we have to seek for the requested contact.
+        int elemToRemoveIdx = invalid_index();
+        for (int i = 0; i < size; ++i)
+        {
+            if ((contacts[i].firstName == firstName) &&
+                (contacts[i].lastName == lastName) &&
+                (contacts[i].age == age))
+            {
+                elemToRemoveIdx = i;
+                break;
+            }
+        }
+
+        if (elemToRemoveIdx == invalid_index())
+            return;
+
+        Contact* newContactList = new Contact[size - 1];
+
+        for (int i = 0; i < elemToRemoveIdx; ++i)
+            newContactList[i] = contacts[i];
+
+        for (int i = elemToRemoveIdx + 1; i < size; ++i)
+            newContactList[i - 1] = contacts[i];
+
+        delete[] contacts;
+        contacts = newContactList;
+        size--;
+    }
+
+    void displayContact()
+    {
+        std::cout << "List des contacts :" << std::endl;
+        std::cout << "-------------------" << std::endl;
+
+        std::cout << std::endl;
+        for (int i = 0; i < size; ++i)
+        {
+            std::cout << "prenom : " << contacts[i].firstName << std::endl;
+            std::cout << "nom    : " << contacts[i].lastName << std::endl;
+            std::cout << "age    : " << contacts[i].age << std::endl;
+            std::cout << std::endl;
+        }
+    }
+};
+
+int main()
+{
+    FriendList fl;
+
+    fl.addContact("Robert", "LeRoutier", 42);
+    fl.displayContact();
+    fl.removeContact("Robert", "LeRoutier", 42);
+    fl.displayContact();
+}
