@@ -1,0 +1,138 @@
+#include <iostream>
+
+struct intNode
+{
+	intNode* pNext;
+	intNode* pPrevious;
+	int value;
+
+	intNode() : pNext(nullptr), pPrevious(nullptr) {}
+};
+
+void show(intNode* n)
+{
+	intNode* currentNode = n;
+	while (currentNode != nullptr)
+	{
+		std::cout << currentNode->value << " ";
+		currentNode = currentNode->pNext;
+	}
+}
+
+void pushFront(intNode* firstNode, intNode* newNode)
+{
+	newNode->pPrevious = nullptr;
+	firstNode->pPrevious = newNode;
+	newNode->pNext = firstNode;
+}
+
+void pushBack(intNode* lastNode, intNode* newNode)
+{
+	newNode->pNext = nullptr;
+	lastNode->pNext = newNode;
+	newNode->pPrevious = lastNode;
+}
+
+struct intList
+{
+	intNode* pFirstNode;
+	intNode* pLastNode;
+
+	intList() : pFirstNode(nullptr), pLastNode(nullptr) {}
+
+	bool isEmpty()
+	{
+		return pFirstNode == nullptr;
+	}
+
+	void pushBack(int value)
+	{
+		intNode* newLastNode = new intNode;
+		newLastNode->value = value;
+
+		if (isEmpty())
+		{
+			pFirstNode = newLastNode;
+		}
+		else
+		{
+			::pushBack(pLastNode, newLastNode);
+		}
+		pLastNode = newLastNode;
+	}
+	void pushFront(int value)
+	{
+		intNode* newFirstNode = new intNode;
+		newFirstNode->value = value;
+		if (isEmpty())
+		{
+			pLastNode = newFirstNode;
+		}
+		else
+		{
+			::pushFront(pFirstNode, newFirstNode);
+		}
+
+		pFirstNode = newFirstNode;
+	}
+
+	int pogBa()
+	{
+		int value = pLastNode->value;
+		intNode* popNode = pLastNode;
+		intNode* newLastNode = pLastNode->pPrevious;
+
+		if (newLastNode == nullptr)
+		{
+			pFirstNode = nullptr;
+		}
+		else
+		{
+			newLastNode->pNext = nullptr;
+		}
+		pLastNode = newLastNode;
+		delete popNode;
+		return value;
+	}
+
+	int popFront()
+	{
+
+	}
+
+	void show()
+	{
+		::show(pFirstNode);
+	}
+};
+
+int main()
+{
+	intList list;
+
+	list.pushBack(3);
+	list.pushBack(4);
+
+	list.pushFront(2);
+	list.pushFront(1);
+
+	int val = list.pogBa();
+	std::cout << val << std::endl;
+	list.show();
+	std::cout << std::endl;
+
+	int val1 = list.pogBa();
+	std::cout << val1 << std::endl;
+	list.show();
+	std::cout << std::endl;
+
+	int val2 = list.pogBa();
+	std::cout << val2 << std::endl;
+	list.show();
+	std::cout << std::endl;
+
+	int val3 = list.pogBa();
+	std::cout << val3 << std::endl;
+	list.show();
+	std::cout << std::endl;
+}
