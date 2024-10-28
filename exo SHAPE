@@ -1,0 +1,75 @@
+#include <iostream>
+
+class Vec2
+{
+public:
+    float m_x;
+    float m_y;
+};
+
+class Shape : public Vec2
+{
+    Shape(float x, float y){}
+
+    void show()
+    {
+
+    }
+
+};
+
+class Circle : public Shape
+{
+
+};
+class Rectangle : public Shape
+{
+
+};
+class Triangle : public Shape
+{
+
+};
+
+class ShapeGenerator
+{
+    Shape* getShape(int idx)
+    {
+        switch (idx)
+        {
+        case 0:
+            return new Circle{ Vec2{0., 0.}, 10. };
+
+        case 1:
+            return new Rectangle{ Vec2{0., 0.}, Vec2{10., 10.} };
+
+        case 2:
+            return new Triangle{ Vec2{0., 0.}, Vec2{10., 0.}, Vec2{0., 10.} };
+
+        case 3:
+            return new Circle{ Vec2{5., -3.}, 0. };
+
+        case 4:
+            return new Rectangle{ Vec2{-10., 0.}, Vec2{10., 0.} };
+
+        case 5:
+            return new Triangle{ Vec2{-10., -20.}, Vec2{10., 0.}, Vec2{30., 10.} };
+
+        case 6:
+            return new Circle{ Vec2{-9., 2.5}, 0.1 };
+
+        case 7:
+            return new Rectangle{ Vec2{-10., 0.}, Vec2{-20., 10.} };
+        }
+    }
+
+    int getNumShape()
+    {
+        return 8;
+    }
+};
+
+int main()
+{
+    std::cout << "Hello World!\n";
+}
