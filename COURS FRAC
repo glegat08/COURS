@@ -40,18 +40,30 @@ Frac operator/(const Frac& op1, const Frac& op2)
 	return tmp;
 }
 
-Frac operator^(const Frac& op1, int op2)
+Frac operator^(Frac& f, unsigned int puissance)
 {
-	Frac tmp{ std::pow(op1.num ^ op2), std::pow(op1.denom ^ op2) };
+	int result = 1;
+	int result1 = 1;
+	for (int i = 0; i < puissance; ++i)
+	{
+		result *= f.num;
+		result1 *= f.denom;
+	}
+
+	Frac tmp
+	{
+		result, result1
+	};
 	return tmp;
 }
 
 int main()
 {
-	Frac f1(1, 4);
+	Frac f1(5, 4);
 	Frac f2(1, 3);
 
 	std::cout << f1 << std::endl;
+	std::cout << std::endl;
 	std::cout << f2 << std::endl;
 	std::cout << std::endl;
 	std::cout << f1 + f2 << std::endl;
@@ -62,6 +74,6 @@ int main()
 	std::cout << std::endl;
 	std::cout << f1 / f2 << std::endl;
 	std::cout << std::endl;
-	std::cout << (f1 ^ 2) << std::endl;
+	std::cout << (f1 ^ 3) << std::endl;
 
 }
