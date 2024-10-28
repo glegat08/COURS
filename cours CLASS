@@ -1,0 +1,105 @@
+#include <iostream>
+
+class Vehicle
+{
+public:
+    Vehicle(const std::string& brand) : m_brand(brand)
+    {
+        std::cout << "Vehicle ctor\n";
+    }
+
+    virtual ~Vehicle()
+    {
+        std::cout << "Vehicle dtor\n";
+    }
+
+    virtual void makeNoise() = 0;
+
+    const std::string& getBrand()
+    {
+        return m_brand;
+    }
+
+private:
+    std::string m_brand;
+};
+
+class Wheel
+{
+public:
+    Wheel()
+    {
+        std::cout << "Wheel ctor\n";
+    }
+
+    ~Wheel()
+    {
+        std::cout << "Wheel dtor\n";
+    }
+};
+
+class Car : public Vehicle
+{
+public:
+    Car(const std::string& brand) : Vehicle(brand)
+    {
+        std::cout << "Car ctor\n";
+    }
+
+    ~Car()
+    {
+        std::cout << "Car dtor\n";
+    }
+
+    void makeNoise()
+    {
+        std::cout << "VROUM" << std::endl;
+    }
+
+private:
+    Wheel m_wheels;
+};
+
+class Plane : public Vehicle
+{
+public:
+    Plane(const std::string& brand) : Vehicle(brand)
+    {
+        std::cout << "Plane ctor\n";
+    }
+
+    ~Plane()
+    {
+        std::cout << "Plane dtor\n";
+    }
+
+    void makeNoise()
+    {
+        std::cout << "ZIOUM" << std::endl;
+    }
+};
+
+
+Vehicle* createVehicule()
+{
+    std::string type;
+    std::cout << "Vehicle type : ";
+    std::cin >> type;
+    if (type == "car")
+        return new Car{ "" };
+    else if (type == "plane")
+        return new Plane{ "" };
+    else
+        return nullptr;
+}
+
+
+int main()
+{
+    // Will trigger compile error C2259: 'Vehicle': cannot instantiate abstract class
+    //Vehicle iodsoidsoisd{ "psfsdfdf" };
+
+    Vehicle* v = createVehicule();
+    v->makeNoise();
+    delete v;
+}
