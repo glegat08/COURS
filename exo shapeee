@@ -1,0 +1,124 @@
+#include <iostream>
+
+class Vec2
+{
+public:
+    float m_x;
+    float m_y;
+
+    Vec2(float x = 0.0, float y = 0.0) : m_x(x), m_y(y) {}
+};
+
+std::ostream& operator <<(std::ostream& s, const Vec2& v)
+{
+    s << v.m_x << ";" << v.m_y;
+    return s;
+}
+
+class Shape
+{
+public:
+    virtual void show() const = 0;
+};
+
+class Circle : public Shape
+{
+public:
+    Circle(const Vec2& point, float point2) : p1(point), p2(point2) {}
+
+    Vec2 p1;
+    float p2;
+
+    void show() const override
+    {
+        std::cout << "Ceci est un cercle" << std::endl;
+        std::cout << "Point 1 : " << p1 << std::endl;
+        std::cout << "Point 2 : " << p2 << std::endl;
+        std::cout << std::endl;
+    }
+};
+
+class Rectangle : public Shape
+{
+public:
+    Rectangle(const Vec2& point, const Vec2& point2) : p1(point), p2(point2) {}
+
+    Vec2 p1;
+    Vec2 p2;
+
+    void show() const override
+    {
+        std::cout << "Ceci est un rectangle" << std::endl;
+        std::cout << "Point 1 : " << p1 << std::endl;
+        std::cout << "Point 2 : " << p2 << std::endl;
+        std::cout << std::endl;
+    }
+};
+
+class Triangle : public Shape
+{
+public:
+    Triangle(const Vec2& point1, const Vec2& point2, const Vec2& point3)
+        : p1(point1), p2(point2), p3(point3) {}
+
+    Vec2 p1, p2, p3;
+
+    void show() const override
+    {
+        std::cout << "Ceci est un triangle" << std::endl;
+        std::cout << "Point 1 : " << p1 << std::endl;
+        std::cout << "Point 2 : " << p2 << std::endl;
+        std::cout << "Point 3 : " << p3 << std::endl;
+        std::cout << std::endl;
+    }
+};
+
+class ShapeGenerator
+{
+public:
+    Shape* getShape(int idx)
+    {
+        switch (idx)
+        {
+        case 0:
+            return new Circle{ Vec2{0., 0.}, 10. };
+        case 1:
+            return new Rectangle{ Vec2{0., 0.}, Vec2{10., 10.} };
+        case 2:
+            return new Triangle{ Vec2{0., 0.}, Vec2{10., 0.}, Vec2{0., 10.} };
+        case 3:
+            return new Circle{ Vec2{5., -3.}, 0. };
+        case 4:
+            return new Rectangle{ Vec2{-10., 0.}, Vec2{10., 0.} };
+        case 5:
+            return new Triangle{ Vec2{-10., -20.}, Vec2{10., 0.}, Vec2{30., 10.} };
+        case 6:
+            return new Circle{ Vec2{-9., 2.5}, 0.1 };
+        case 7:
+            return new Rectangle{ Vec2{-10., 0.}, Vec2{-20., 10.} };
+        }
+    }
+
+    int getNumShape() const
+    {
+        return 8;
+    }
+};
+
+int main()
+{
+    ShapeGenerator generator;
+    int shapeCount = generator.getNumShape();
+
+    for (int i = 0; i < shapeCount; ++i)
+    {
+        Shape* shape = generator.getShape(i);
+        if (shape)
+        {
+            shape->show();
+            delete shape;
+        }
+    }
+
+    return 0;
+}
