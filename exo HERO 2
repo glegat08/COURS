@@ -1,0 +1,98 @@
+#include <iostream>
+#include <vector>
+
+#define interface class
+
+void display(std::string msg)
+{
+    std::cout << msg << std::endl;
+}
+
+class IFightingStyle
+{
+public:
+    virtual ~IFightingStyle() = default;
+    virtual void fight() = 0;
+};
+
+class FightwithSword : public IFightingStyle
+{
+public:
+    void fight() override
+    {
+        display("Fight with sword");
+    }
+};
+
+class FightwithStick : public IFightingStyle
+{
+public:
+    void fight() override
+    {
+        display("Fight with stick");
+    }
+};
+
+interface Hero
+{
+public:
+    virtual ~Hero() = default;
+    void fight()
+    {
+        m_FightingStyle->fight();
+    }
+
+protected:
+    IFightingStyle* m_FightingStyle;
+};
+
+class Barbarian : public Hero
+{
+public:
+    Barbarian()
+    {
+        m_FightingStyle = new FightwithSword;
+    }
+};
+
+class Mage : public Hero
+{
+public:
+    Mage()
+    {
+        m_FightingStyle = new FightwithStick;
+    }
+};
+
+void armyFight(std::vector<Hero*>& heroes)
+{
+    for (auto i = 0; i < heroes.size(); ++i)
+    {
+        heroes[i]->fight();
+    }
+}
+
+int main()
+{
+    std::vector<Hero*> heroes;
+    heroes.push_back(new Barbarian);
+    heroes.push_back(new Mage);
+
+    armyFight(heroes);
+
+    //Hero* barbarian = new Barbarian();
+    //Hero* mage = new Mage();
+    //barbarian->fight();
+    //mage->fight();
+
+    for (auto i = 0; i < heroes.size(); ++i)
+    {
+        delete heroes[i];
+    }
+    heroes.clear();
+
+
+    //delete barbarian;
+    //delete mage;
+    return 0;
+}
