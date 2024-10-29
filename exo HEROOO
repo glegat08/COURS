@@ -1,0 +1,151 @@
+#include <iostream>
+#include <conio.h>
+
+class Hero
+{
+public:
+	virtual ~Hero() = default;
+	virtual void fight() = 0;
+	virtual void block() = 0;
+	virtual void fly() = 0;
+	virtual void lockpick() = 0;
+//protected:
+//	virtual void barbarian_fight() = 0;
+};
+
+class Barbarian : public Hero
+{
+public:
+	void fight() override
+	{
+		std::cout << "SLASH COUP D'EPEE !!\n";
+	}
+
+	void block() override
+	{
+		std::cout << "ATTACK BLOCKED\n";
+	}
+
+	void fly() {}
+
+	void lockpick() {}
+};
+
+class Mage : public Hero
+{
+public:
+	void fight() override
+	{
+		std::cout << "BOULE DE FEU !!\n";
+	}
+
+	void fly() override
+	{
+		std::cout << "You are flying !! WOW !\n";
+	}
+
+	void block() {}
+
+	void lockpick() {}
+};
+
+class Rogue : public Hero
+{
+public:
+	void fight() override
+	{
+		std::cout << "STABBED\n";
+	}
+
+	void lockpick() override
+	{
+		std::cout << "You are lockpicking someone's house...\n";
+	}
+
+	void fly() {}
+
+	void block() {}
+};
+
+//class Fighting_Style : protected Hero
+//{
+//public:
+//	void barbarian_fight()
+//	{
+//		std::cout << "SLASH COUP D'EPEE !!\n";
+//	}
+//};
+
+int main()
+{
+	Hero* barbarian = new Barbarian();
+	//Barbarian* styleFight = new Fighting_Style();
+	Hero* mage = new Mage();
+	Hero* rogue = new Rogue();
+	char action; char type;
+	
+	std::cout << "Which class do you want to be? (M = Mage/B = Barbarian/R = Rogue)\n";
+	type = _getch();
+	system("cls");
+
+	if (type == 'b')
+	{
+		std::cout << "What yo dou want to do? (A = Attack/B = Block)\n";
+		action = _getch();
+		system("cls");
+		if (action == 'a')
+		{
+			barbarian->fight();
+		}
+		else if (action == 'b')
+		{
+			barbarian->block();
+		}
+		else
+		{
+			std::cout << "Too late ! You're dead..\n";
+		}
+	}
+
+	if (type == 'm')
+	{
+		std::cout << "What yo dou want to do? (A = Attack/F = Fly)\n";
+		action = _getch();
+		system("cls");
+		if (action == 'a')
+		{
+			mage->fight();
+		}
+		else if (action == 'f')
+		{
+			mage->fly();
+		}
+		else
+		{
+			std::cout << "Too late ! Mana is missing !\n";
+		}
+	}
+
+	if (type == 'r')
+	{
+		std::cout << "What yo dou want to do? (A = Attack/L = Lockpick)\n";
+		action = _getch();
+		system("cls");
+		if (action == 'a')
+		{
+			rogue->fight();
+		}
+		else if (action == 'l')
+		{
+			rogue->lockpick();
+		}
+		else
+		{
+			std::cout << "Too late ! You've been arrested !\n";
+		}
+	}
+
+	delete mage;
+	delete barbarian;
+	delete rogue;
+}
