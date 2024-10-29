@@ -1,0 +1,32 @@
+#include <iostream>
+#include <cmath>
+
+struct Point
+{
+	float a; float b; float c;
+
+	float pont = (a * 10 * 10 + b * 10 + c);
+	void show()
+	{
+		if (pont > 0)
+		{
+			std::cout << "/----\\";
+		}
+		else
+		{
+			std::cout << "boum";
+		}
+	}
+};
+
+int main()
+{
+	Point point;
+	std::cout << "entrer a : " << std::endl;
+	std::cin >> point.a;
+	std::cout << "entrer b : " << std::endl;
+	std::cin >> point.b;
+	std::cout << "entrer c : " << std::endl;
+	std::cin >> point.c;
+	point.show();
+}
