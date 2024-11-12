@@ -9,10 +9,14 @@ class BitMap
 public:
 	BitMap(const int& width = 0, const int& height = 0)
 		: m_width(width)
-		, m_height(height) {}
+		, m_height(height) 
+	{
+		updateInfoheader();
+		updateFileheader();
+	}
 
 	~BitMap() = default;
-	
+
 	struct rgb
 	{
 		rgb(const uint8& r = 0, const uint8& g = 0, const uint8& b = 0)
@@ -47,8 +51,7 @@ public:
 		for (auto i = 0; i < size; ++i)
 			m_data[i] = data[i];
 
-
-		updapteFileheader();
+		updateFileheader();
 	}
 
 	bool save(const std::string& fileName)
@@ -62,6 +65,19 @@ public:
 		file.write(reinterpret_cast<char*>(&m_infoheader[0]), 40); // info header to write
 
 		// write data
+		const int rowSize = m_width * 3;
+		const int paddingSize = (4 - (rowSize % 4)) % 4;
+		char padding[3] = { 0, 0, 0 };
+
+		for (int row = 0; row < m_height; ++row)
+		{
+			for (int col = 0; col < m_width; ++col)
+			{
+				const rgb& pixel = m_data[row * m_width + col];
+				file.write(reinterpret_cast<const char*>(pixel.pixel), 3);
+			}
+			file.write(padding, paddingSize);
+		}
 
 		file.close();
 		return true;
@@ -74,7 +90,7 @@ private:
 		return 72 * 39.3701;
 	}
 
-	void updapteFileheader()
+	void updateFileheader()
 	{
 		static const int start = 2;
 		const auto fileSize = getFileSize();
@@ -110,7 +126,7 @@ private:
 		}
 	}
 
-	uint8 m_fileheader[14] = 
+	uint8 m_fileheader[14] =
 	{
 		'B', 'M', // id
 		0, 0, 0, 0, // size
@@ -143,12 +159,15 @@ int main()
 {
 	BitMap bmp(2, 2);
 
-	BitMap::rgb color[3] =
+	BitMap::rgb color[4] =
 	{
 		BitMap::rgb{255, 0, 0},
 		BitMap::rgb{0, 255, 0},
-		BitMap::rgb{0, 0, 255}
+		BitMap::rgb{0, 0, 255},
+		BitMap::rgb{255, 0, 255},
 	};
 
-	bmp.setData(color, 3);
+	bmp.setData(color, 4);
+
+	bmp.save("C:\\Users\\guill\\Pictures\\MyBitmap.bmp");
 }
